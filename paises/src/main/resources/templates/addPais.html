@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>CREAR PAIS</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>FORMULARIO CREACION DE PAIS</h1>
+<form action="#" th:action="@{/pais/addPais}" th:object="${pais}" method="post">
+  <p>Nombre: <input type="text" th:field="*{nombre}" /></p>
+  <p>Extension (metros): <input type="number" th:field="*{extension}" /></p>
+  <p>Continente: <input type="text" th:field="*{continente}" /></p>
+  <p>ID_Capital: <input type="number" th:field="*{capital}" /></p>
+  <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
+</body>
+</html>

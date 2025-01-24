@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Aritz</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <h1>Videojuegos</h1>
+<!--    <p th:text="|Buenas, ${nombre} ${apellidos}!|" />-->
+
+    <form action="#" th:action="@{/pais/editar}" th:object="${pais}" method="post">
+        <p>Id: <input type="text" th:field="*{id}" /></p>
+        <p>Nombre: <input type="text" th:field="*{nombre}" /></p>
+        <p>Continente: <input type="text" th:field="*{continente}" /></p>
+        <p>Extension: <input type="text" th:field="*{extension}" /></p>
+        <p>Id capital: <input type="text" th:field="*{capital.id}" /></p>
+        <p><input type="submit" value="Editar pais"/> <input type="reset" value="Limpiar campos" /></p>
+    </form>
+
+<!--    <form action="#" th:action="@{/videojuegos/all}" method="get">-->
+
+<!--        <p><input type="submit" value="Ver lista paises"/></p>-->
+<!--    </form>-->
+</body>
+</html>

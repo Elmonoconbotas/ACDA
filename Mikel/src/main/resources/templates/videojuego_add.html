@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mikel</title>
+</head>
+<body>
+    <h1>Formulario de añadir VJ</h1>
+
+    <form action="#" th:action="@{/videojuegos/add}" th:object="${videojuego}" method="post">
+        <p>Nombre: <input type="text" th:field="*{nombre}" /></p>
+        <p>Plataforma: <input type="text" th:field="*{plataforma}" /></p>
+        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+    </form>
+</body>
+</html>

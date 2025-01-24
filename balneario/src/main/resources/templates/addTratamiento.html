@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>CREAR CAPITAL</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>FORMULARIO CREACION DE TRATAMIENTO</h1>
+<form action="#" th:action="@{/tratamiento/addTratamiento}" th:object="${tratamiento}" method="post">
+  <p>Nombre: <input type="text" th:field="*{Nombre}" /></p>
+  <p>Coste: <input type="number" th:field="*{Coste}" /></p>
+  <p>Balneario: <input type="text" th:field="*{balneario}" /></p>
+  <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
+</body>
+</html>

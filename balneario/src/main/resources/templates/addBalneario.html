@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>CREAR PAIS</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>FORMULARIO CREACION DE BALNEARIOS</h1>
+<form action="#" th:action="@{/balneario/addBalneario}" th:object="${balneario}" method="post">
+  <p>Nombre: <input type="text" th:field="*{nombre}" /></p>
+  <p>ID_Tratamiento: <input type="number" th:field="*{tratamientos}" /></p>
+  <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
+</body>
+</html>
