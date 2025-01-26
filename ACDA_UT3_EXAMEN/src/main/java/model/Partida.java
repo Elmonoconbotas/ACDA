@@ -25,13 +25,22 @@ public class Partida {
     @JoinColumn(name = "TorneoID", nullable = false)
     private Torneo torneo;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "equipoID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Equipo_Local_ID", nullable = false)
+    private Equipo equipoLocal;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EquipoID_Visitante_ID", nullable = false)
     private Equipo equipoVisitante;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "equipoID")
-    private Equipo equipoLocal;
+    public Partida(Equipo equipoVisitante, Equipo equipoLocal, Torneo torneo, int resultado, Integer duracion, Date fechaHora) {
+        this.equipoVisitante = equipoVisitante;
+        this.equipoLocal = equipoLocal;
+        this.torneo = torneo;
+        this.resultado = resultado;
+        this.duracion = duracion;
+        this.fechaHora = fechaHora;
+    }
 
     public Partida() {}
 
@@ -75,6 +84,14 @@ public class Partida {
         this.torneo = torneo;
     }
 
+    public Equipo getEquipoLocal() {
+        return equipoLocal;
+    }
+
+    public void setEquipoLocal(Equipo equipoLocal) {
+        this.equipoLocal = equipoLocal;
+    }
+
     public Equipo getEquipoVisitante() {
         return equipoVisitante;
     }
@@ -83,11 +100,16 @@ public class Partida {
         this.equipoVisitante = equipoVisitante;
     }
 
-    public Equipo getEquipoLocal() {
-        return equipoLocal;
-    }
-
-    public void setEquipoLocal(Equipo equipoLocal) {
-        this.equipoLocal = equipoLocal;
+    @Override
+    public String toString() {
+        return "Partida{" +
+                "partidaID=" + partidaID +
+                ", fechaHora=" + fechaHora +
+                ", duracion=" + duracion +
+                ", resultado=" + resultado +
+                ", torneo=" + torneo +
+                ", equipoLocal=" + equipoLocal +
+                ", equipoVisitante=" + equipoVisitante +
+                '}';
     }
 }

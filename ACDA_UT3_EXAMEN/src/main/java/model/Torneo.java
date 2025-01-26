@@ -35,8 +35,15 @@ public class Torneo {
     @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Partida> partidas = new ArrayList<>();
 
-    @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Participa> participaciones = new ArrayList<>();
+    @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Participa> participantes = new ArrayList<>();
+
+    public Torneo(String nombre, Date fInicio, Date fFin, BigDecimal premio) {
+        this.nombre = nombre;
+        this.fInicio = fInicio;
+        this.fFin = fFin;
+        this.premio = premio;
+    }
 
     public Torneo() {}
 
@@ -88,11 +95,23 @@ public class Torneo {
         this.partidas = partidas;
     }
 
-    public List<Participa> getParticipaciones() {
-        return participaciones;
+    public List<Participa> getParticipantes() {
+        return participantes;
     }
 
-    public void setParticipaciones(List<Participa> participaciones) {
-        this.participaciones = participaciones;
+    public void setParticipantes(List<Participa> participantes) {
+        this.participantes = participantes;
+    }
+
+    @Override
+    public String toString() {
+        return "Torneo{" +
+                "torneoID=" + torneoID +
+                ", nombre='" + nombre + '\'' +
+                ", fInicio=" + fInicio +
+                ", fFin=" + fFin +
+                ", premio=" + premio +
+                ", participantes=" + participantes.size() +
+                '}';
     }
 }

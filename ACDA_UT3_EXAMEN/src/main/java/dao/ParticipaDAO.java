@@ -1,8 +1,10 @@
 package dao;
 
 import model.Participa;
-import model.Partida;
+import model.ParticipaID;
 
-public class ParticipaDAO extends GenericDAOImpl<Participa, Integer>{
-    public ParticipaDAO(){super(Participa.class);}
+public class ParticipaDAO extends GenericDAOImpl<Participa, ParticipaID> {
+    public ParticipaDAO() {
+        super(Participa.class);
+    }
 }

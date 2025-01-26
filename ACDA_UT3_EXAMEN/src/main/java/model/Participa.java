@@ -1,7 +1,7 @@
 package model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "Participa")
@@ -9,20 +9,27 @@ public class Participa {
     @EmbeddedId
     private ParticipaID participaID = new ParticipaID();
 
-
-    @Size(min = 1)
-    @Transient
+    @Min(value = 1, message = "No se admiten valores menores a 1")
+    @Column(name = "Clasificacion")
     private int clasificacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "equipoID", nullable = false)
-    private Equipo equipo;
-
-    @ManyToOne(fetch = FetchType.EAGER)
+    @MapsId("torneoID")
     @JoinColumn(name = "torneoID", nullable = false)
     private Torneo torneo;
 
-    public Participa(){}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("equipoID")
+    @JoinColumn(name = "equipoID", nullable = false)
+    private Equipo equipo;
+
+    public Participa() {}
+
+    public Participa(int clasificacion, Torneo torneo, Equipo equipo) {
+        this.clasificacion = clasificacion;
+        this.torneo = torneo;
+        this.equipo = equipo;
+    }
 
     public ParticipaID getParticipaID() {
         return participaID;
@@ -32,13 +39,21 @@ public class Participa {
         this.participaID = participaID;
     }
 
-    @Size(min = 1)
+    @Min(value = 1, message = "No se admiten valores menores a 1")
     public int getClasificacion() {
         return clasificacion;
     }
 
-    public void setClasificacion(@Size(min = 1) int clasificacion) {
+    public void setClasificacion(@Min(value = 1, message = "No se admiten valores menores a 1") int clasificacion) {
         this.clasificacion = clasificacion;
+    }
+
+    public Torneo getTorneo() {
+        return torneo;
+    }
+
+    public void setTorneo(Torneo torneo) {
+        this.torneo = torneo;
     }
 
     public Equipo getEquipo() {
@@ -49,11 +64,13 @@ public class Participa {
         this.equipo = equipo;
     }
 
-    public Torneo getTorneo() {
-        return torneo;
-    }
-
-    public void setTorneo(Torneo torneo) {
-        this.torneo = torneo;
+    @Override
+    public String toString() {
+        return "Participa{" +
+                "participaID=" + participaID +
+                ", clasificacion=" + clasificacion +
+                ", torneo=" + torneo +
+                ", equipo=" + equipo +
+                '}';
     }
 }

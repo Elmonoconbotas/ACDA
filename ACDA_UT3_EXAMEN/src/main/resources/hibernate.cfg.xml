@@ -9,10 +9,10 @@
         <property name="hibernate.show_sql">false</property>
         <property name="hibernate.format_sql">true</property>
 
+        <mapping class="model.Equipo"/>
         <mapping class="model.Jugador"/>
+        <mapping class="model.Participa"/>
         <mapping class="model.Partida"/>
         <mapping class="model.Torneo"/>
-        <mapping class="model.Equipo"/>
-        <mapping class="model.Participa"/>
     </session-factory>
 </hibernate-configuration>

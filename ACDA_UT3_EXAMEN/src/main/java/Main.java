@@ -1,89 +1,79 @@
+import constants.PartidaConstans;
 import model.*;
 import service.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 public class Main {
-    //SERVICES
-    private static EquipoService equipoService = new EquipoService();
-    private static JugadorService jugadorService = new JugadorService();
-    private static ParticipaService participaService = new ParticipaService();
-    private static PartidaService partidaService = new PartidaService();
-    private static TorneoService torneoService = new TorneoService();
+    private static final TorneoService torneoService = new TorneoService();
+    private static final PartidaService partidaService = new PartidaService();
+    private static final EquipoService equipoService = new EquipoService();
+    private static final JugadorService jugadorService = new JugadorService();
+
     public static void main(String[] args) {
-        Torneo torneo = new Torneo();
-        torneo.setNombre("Torneo1");
-        torneo.setPremio(BigDecimal.valueOf(17));
+        // Crear torneo
+        Torneo torneo = new Torneo("Torneo1",new Date(), new Date(), BigDecimal.valueOf(100));
+        torneoService.create(torneo);
 
-        Equipo equipo1 = new Equipo();
-        Equipo equipo2 = new Equipo();
-        Equipo equipo3 = new Equipo();
-        equipo1.setNombre("equipo1");
-        equipo2.setNombre("equipo2");
-        equipo3.setNombre("equipo3");
-
-        equipo1.setPais("pais1");
-        equipo2.setPais("pais2");
-        equipo3.setPais("pais3");
-
-        equipo1.setPresupuesto(BigDecimal.valueOf(1000));
-        equipo2.setPresupuesto(BigDecimal.valueOf(2000));
-        equipo3.setPresupuesto(BigDecimal.valueOf(3000));
-
+        // Crear equipos
+        Equipo equipo1 = new Equipo("Equipo_1", new Date(), "España", BigDecimal.valueOf(10000.50), null);
+        Equipo equipo2 = new Equipo("Equipo_3", new Date(), "asdf", BigDecimal.valueOf(500), null);
+        Equipo equipo3 = new Equipo("Equipo_3", new Date(), "fdsa", BigDecimal.valueOf(100), null);
         equipoService.create(equipo1);
         equipoService.create(equipo2);
         equipoService.create(equipo3);
 
-        Partida partida1 = new Partida();
-        Partida partida2 = new Partida();
-        Partida partida3 = new Partida();
+        // Jugadores equipo 1
+        Jugador jugador1 = new Jugador("Jugador_1", "Alias_1", new Date(), "España", equipo1);
+        Jugador jugador2 = new Jugador("Jugador_2", "Alias_2", new Date(), "España", equipo1);
+        jugadorService.create(jugador1);
+        jugadorService.create(jugador2);
 
-        partida1.setDuracion(5);
-        partida2.setDuracion(6);
-        partida3.setDuracion(7);
+        // Jugadores equipos 2 y 3
+        Jugador jugador3 = new Jugador("Jugador_3", "Alias_3", new Date(), "asdf", equipo2);
+        Jugador jugador4 = new Jugador("Jugador_4", "Alias_4", new Date(), "fdsa", equipo3);
+        jugadorService.create(jugador3);
+        jugadorService.create(jugador4);
 
-        partida1.setResultado(1);
-        partida2.setResultado(2);
-        partida3.setResultado(4);
+        // Asignar capitanes
+        equipo1.setCapitan(jugador1);
+        equipo2.setCapitan(jugador3);
+        equipo3.setCapitan(jugador4);
+        equipoService.update(equipo1);
+        equipoService.update(equipo2);
+        equipoService.update(equipo3);
 
-        partida1.setEquipoLocal(equipo1);
-        partida1.setEquipoVisitante(equipo2);
-        partida2.setEquipoLocal(equipo3);
-        partida2.setEquipoVisitante(equipo1);
-        partida3.setEquipoLocal(equipo2);
-        partida3.setEquipoVisitante(equipo3);
-
+        // Crear partidas
+        Partida partida1 = new Partida(equipo1, equipo2, torneo, PartidaConstans.RESULTADO_EMPATE, 45, new Date());
+        Partida partida2 = new Partida(equipo1, equipo3, torneo, PartidaConstans.RESULTADO_GANA_EQUIPO_1, 45, new Date());
+        Partida partida3 = new Partida(equipo2, equipo3, torneo, PartidaConstans.RESULTADO_GANA_EQUIPO_2, 45, new Date());
         partidaService.create(partida1);
         partidaService.create(partida2);
         partidaService.create(partida3);
 
+        // Participaciones al torneo
+        Participa participa1 = new Participa(1, torneo, equipo1);
+        Participa participa2 = new Participa(2, torneo, equipo2);
+        Participa participa3 = new Participa(3, torneo, equipo3);
+        torneo.getParticipantes().add(participa1);
+        torneo.getParticipantes().add(participa2);
+        torneo.getParticipantes().add(participa3);
+        torneoService.update(torneo);
 
-        Jugador jugador1 = new Jugador();
-        Jugador jugador2 = new Jugador();
-        Jugador jugador3 = new Jugador();
-        Jugador jugador4 = new Jugador();
+        // Consultas
+        Equipo equipoConDatos = equipoService.findByIdWithJugadoresYPartidas(equipo1.getEquipoID());
+        System.out.println("Equipo con Datos: \n" + equipoConDatos);
 
-        jugador1.setNombreApellidos("jugador1");
-        jugador1.setAlias("alias1");
-        jugador2.setNombreApellidos("jugador2");
-        jugador2.setAlias("alias2");
-        jugador3.setNombreApellidos("jugador3");
-        jugador3.setAlias("alias3");
-        jugador4.setNombreApellidos("jugador4");
-        jugador4.setAlias("alias4");
+        List<Equipo> equiposConPresupuesto = equipoService.findByPresupuestoGreatherThan(BigDecimal.valueOf(400));
+        System.out.println("\n\n\nEquipos con presupuesto:");
+        for (Equipo equipo : equiposConPresupuesto)
+            System.out.println(equipo);
 
-        jugador1.setEquipo(equipo1);
-        jugador2.setEquipo(equipo1);
-        jugador3.setEquipo(equipo2);
-        jugador4.setEquipo(equipo3);
-
-        jugadorService.create(jugador1);
-        jugadorService.create(jugador2);
-        jugadorService.create(jugador3);
-        jugadorService.create(jugador4);
-
-        equipo1.setCapitan(jugador2);
-        equipo2.setCapitan(jugador3);
-        equipo3.setCapitan(jugador4);
+        List<Equipo> equiposGanadores = equipoService.findWinners();
+        System.out.println("\n\n\nEquipos ganadores:");
+        for (Equipo equipo : equiposGanadores)
+            System.out.println(equipo);
     }
 }

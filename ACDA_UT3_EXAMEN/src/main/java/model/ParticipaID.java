@@ -1,13 +1,22 @@
 package model;
 
+import jakarta.persistence.Embeddable;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+@Embeddable
 public class ParticipaID implements Serializable {
     private int torneoID;
     private int equipoID;
 
-    public ParticipaID(){}
+    public ParticipaID(int torneoID, int equipoID) {
+        this.torneoID = torneoID;
+        this.equipoID = equipoID;
+    }
+
+    public ParticipaID() {}
+
     public int getTorneoID() {
         return torneoID;
     }
@@ -31,8 +40,14 @@ public class ParticipaID implements Serializable {
         ParticipaID that = (ParticipaID) o;
         return torneoID == that.torneoID && equipoID == that.equipoID;
     }
+
     @Override
     public int hashCode() {
         return Objects.hash(torneoID, equipoID);
+    }
+
+    @Override
+    public String toString() {
+        return "ParticipaID: torneoID=" + torneoID + ", equipoID=" + equipoID;
     }
 }

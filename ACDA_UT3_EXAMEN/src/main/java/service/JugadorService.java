@@ -7,5 +7,4 @@ public class JugadorService extends GenericServiceImpl<Jugador, Integer> {
     public JugadorService() {
         super(new JugadorDAO());
     }
-
 }

@@ -2,8 +2,10 @@ package model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import org.hibernate.Hibernate;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,38 +17,45 @@ public class Equipo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int equipoID;
 
-    @Size(min = 3, max = 30, message = "Entre 3 y 30 caracteres")
-    @Column(name = "nombre", nullable = false, length = 30)
+    @Size(min = 3, max = 30, message = "Nombres entre 3 y 30 caracteres")
+    @Column(name = "Nombre", nullable = false, length = 30)
     private String nombre;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "F_Fundacion")
-    private Date f_fundacion;
+    @Column(name = "F_Fundacion", nullable = false)
+    private Date fFundacion;
 
-    @Column(name = "nombre", nullable = false, length = 50)
+    @Column(name = "Pais", nullable = false, length = 50)
     private String pais;
 
-    @Column(name = "presupusto", precision = 8, scale = 2)
+    @Column(name = "Presupuesto", nullable = false, precision = 8, scale = 2)
     private BigDecimal presupuesto;
 
-    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true,
-    fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Participa> participaciones = new ArrayList<>();
 
-    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Jugador> jugadores = new ArrayList<>();
-
-    @OneToOne(mappedBy = "equipo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "jugadorID", nullable = false, unique = true)
-    private Jugador capitan;
-
-    @OneToMany(mappedBy = "equipoVisitante", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "equipoVisitante", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Partida> partidasVisitante = new ArrayList<>();
 
-    @OneToMany(mappedBy = "equipoLocal", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "equipoLocal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Partida> partidasLocal = new ArrayList<>();
 
-    public Equipo(){}
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "jugadorID", unique = true)
+    private Jugador capitan;
+
+    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Jugador> jugadores = new ArrayList<>();
+
+    public Equipo(String nombre, Date fFundacion, String pais, BigDecimal presupuesto, Jugador capitan) {
+        this.nombre = nombre;
+        this.fFundacion = fFundacion;
+        this.pais = pais;
+        this.presupuesto = presupuesto;
+        this.capitan = capitan;
+    }
+
+    public Equipo() {}
 
     public int getEquipoID() {
         return equipoID;
@@ -56,20 +65,20 @@ public class Equipo {
         this.equipoID = equipoID;
     }
 
-    public @Size(min = 3, max = 30, message = "Entre 3 y 30 caracteres") String getNombre() {
+    public @Size(min = 3, max = 30, message = "Nombres entre 3 y 30 caracteres") String getNombre() {
         return nombre;
     }
 
-    public void setNombre(@Size(min = 3, max = 30, message = "Entre 3 y 30 caracteres") String nombre) {
+    public void setNombre(@Size(min = 3, max = 30, message = "Nombres entre 3 y 30 caracteres") String nombre) {
         this.nombre = nombre;
     }
 
-    public Date getF_fundacion() {
-        return f_fundacion;
+    public Date getfFundacion() {
+        return fFundacion;
     }
 
-    public void setF_fundacion(Date f_fundacion) {
-        this.f_fundacion = f_fundacion;
+    public void setfFundacion(Date fFundacion) {
+        this.fFundacion = fFundacion;
     }
 
     public String getPais() {
@@ -96,12 +105,20 @@ public class Equipo {
         this.participaciones = participaciones;
     }
 
-    public List<Jugador> getJugadores() {
-        return jugadores;
+    public List<Partida> getPartidasVisitante() {
+        return partidasVisitante;
     }
 
-    public void setJugadores(List<Jugador> jugadores) {
-        this.jugadores = jugadores;
+    public void setPartidasVisitante(List<Partida> partidasVisitante) {
+        this.partidasVisitante = partidasVisitante;
+    }
+
+    public List<Partida> getPartidasLocal() {
+        return partidasLocal;
+    }
+
+    public void setPartidasLocal(List<Partida> partidasLocal) {
+        this.partidasLocal = partidasLocal;
     }
 
     public Jugador getCapitan() {
@@ -110,5 +127,37 @@ public class Equipo {
 
     public void setCapitan(Jugador capitan) {
         this.capitan = capitan;
+    }
+
+    public List<Jugador> getJugadores() {
+        return jugadores;
+    }
+
+    public void setJugadores(List<Jugador> jugadores) {
+        this.jugadores = jugadores;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Equipo{\n" + "\tequipoID=").append(equipoID)
+                .append("\n\tnombre='").append(nombre).append("'")
+                .append("\n\tfFundacion=").append(fFundacion)
+                .append("\n\tpais='").append(pais).append("'")
+                .append("\n\tpresupuesto=").append(presupuesto);
+
+        if (Hibernate.isInitialized(partidasVisitante))
+            sb.append("\n\tpartidasVisitante=").append(partidasVisitante.size());
+
+        if (Hibernate.isInitialized(partidasLocal))
+            sb.append("\n\tpartidasLocal=").append(partidasLocal.size());
+
+        if (Hibernate.isInitialized(capitan))
+            sb.append("\n\tcapitan=").append(capitan);
+
+        if (Hibernate.isInitialized(jugadores))
+            sb.append("\n\tjugadores=").append(jugadores.size());
+
+        return sb.toString();
     }
 }

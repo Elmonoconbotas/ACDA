@@ -3,6 +3,7 @@ package model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -27,8 +28,17 @@ public class Jugador {
     @Column(name = "Nacionalidad", length = 50)
     private String nacionalidad;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EquipoID", nullable = false)
     private Equipo equipo;
+
+    public Jugador(String nombreApellidos, String alias, Date fNacimiento, String nacionalidad, Equipo equipo) {
+        this.nombreApellidos = nombreApellidos;
+        this.alias = alias;
+        this.fNacimiento = fNacimiento;
+        this.nacionalidad = nacionalidad;
+        this.equipo = equipo;
+    }
 
     public Jugador() {}
 
@@ -78,5 +88,17 @@ public class Jugador {
 
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
+    }
+
+    @Override
+    public String toString() {
+        return "Jugador{" +
+                "jugadorID=" + jugadorID +
+                ", nombreApellidos='" + nombreApellidos + '\'' +
+                ", alias='" + alias + '\'' +
+                ", fNacimiento=" + fNacimiento +
+                ", nacionalidad='" + nacionalidad + '\'' +
+                ", equipo=" + equipo.getNombre() +
+                '}';
     }
 }
