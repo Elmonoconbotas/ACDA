@@ -42,34 +42,41 @@
 <div style="width: 80%; margin-inline: auto; margin-top: 50px;">
   <h1 style="margin-bottom: 30px;">Guardar Conductor</h1>
 
-  <!-- <div th:if="${sinPersonas}">
+  <div th:if="${sinConductores}">
     <div class="alert alert-warning" role="alert">
-      No hay personas que puedan ser propietarias de un coche todavía. Crea alguna primero
-      <a th:href="|/personas/guardar|"><i class="bi bi-plus-circle-fill"></i></a>
+      No hay conductores que puedan conducir un autobus todavía. Crea alguna primero
+      <a th:href="|/conductores/guardar|"><i class="bi bi-plus-circle-fill"></i></a>
     </div>
-  </div>-->
+  </div>
+  <div th:if="${sinAutobuses}">
+    <div class="alert alert-warning" role="alert">
+      No hay autobuses que puedan ser conducidos todavía. Crea alguna primero
+      <a th:href="|/autobuses/guardar|"><i class="bi bi-plus-circle-fill"></i></a>
+    </div>
+  </div>
+  <div th:if="${error_existe}">
+    <div class="alert alert-warning" role="alert">
+      Error: Esta combinación ya existe
+      <a th:href="|/conducciones/guardar|"><i class="bi bi-plus-circle-fill"></i></a>
+    </div>
+  </div>
 
-  <!--<form th:if="${!sinPersonas}" action="#" th:action="@{/coches/guardar}" th:object="${coche}" method="post">-->
-  <form action="#" th:action="@{/conductores/guardar}" th:object="${conductor}" method="post">
+  <form th:if="${!sinConductores && !sinAutobuses}" action="#" th:action="@{/conducciones/guardar}" th:object="${conduccion}" method="post">
     <div class="mb-3">
-      <label for="nombre" class="form-label">Nombre</label>
-      <input type="text" th:field="*{nombre}" class="form-control" id="nombre" aria-describedby="nombreHelp">
-      <div id="nombreHelp" class="form-text">Escribe el nombre del conductor, por ejemplo "Diego"</div>
+      <select class="form-select" th:field="*{autobus}" aria-label="Seleciona un autobus">
+        <option value="" disabled selected>Selecciona un autobus</option>
+        <option th:each="autobus: ${autobuses}" th:value="${autobus.AutobusID}" th:text="${autobus.getMatricula()}"/>
+      </select>
     </div>
-
     <div class="mb-3">
-      <label for="carnet" class="form-label">Carnet</label>
-      <input type="text" th:field="*{carnet}" class="form-control" id="carnet" aria-describedby="carnetHelp">
-      <div id="carnetHelp" class="form-text">Introduce el carnet del conductor.</div>
+      <select class="form-select" th:field="*{conductor}" aria-label="Seleciona un conductor">
+        <option value="" disabled selected>Selecciona un conductor</option>
+        <option th:each="conductor: ${conductores}" th:value="${conductor.ConductorID}" th:text="${conductor.getNombre()}"/>
+      </select>
     </div>
 
-    <div class="mb-3">
-      <label for="experiencia" class="form-label">Experiencia</label>
-      <input type="number" th:field="*{experiencia}" class="form-control" id="experiencia" aria-describedby="experienciaHelp">
-      <div id="experienciaHelp" class="form-text">Escribe los años de experiencia del conductor.</div>
-    </div>
-
-    <input th:if="${editar}" type="hidden" th:field="*{cocheID}"/>
+    <input type="hidden" th:if="${editar}" th:field="*{conduceID.autobusID}" />
+    <input type="hidden" th:if="${editar}" th:field="*{conduceID.conductorID}" />
 
     <button type="submit" class="btn btn-primary">Guardar</button>
   </form>

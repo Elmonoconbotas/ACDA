@@ -1,14 +1,15 @@
 package com.example.autobuses.autobuses.model.entity;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class ConduceID implements Serializable {
-    private int conductorID;
-    private int autobusID;
+    private Integer conductorID;
+    private Integer autobusID;
 
     public ConduceID(int conductorID, int autobusID) {
         this.conductorID = conductorID;
@@ -48,6 +49,6 @@ public class ConduceID implements Serializable {
 
     @Override
     public String toString() {
-        return "ConduceID: conductorID=" + conductorID + ", autobusID=" + autobusID;
+        return  conductorID + "," + autobusID;
     }
 }

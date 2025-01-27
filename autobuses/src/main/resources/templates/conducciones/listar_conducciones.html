@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>Ejemplo 1-N</title>
@@ -38,41 +38,33 @@
 <!-- ****** -->
 <!-- CUERPO -->
 <!-- ****** -->
-
 <div style="width: 80%; margin-inline: auto; margin-top: 50px;">
-  <h1 style="margin-bottom: 30px;">Guardar Conductor</h1>
+  <h1 style="margin-bottom: 30px;">Listado de Conducciones <a th:href="|/conducciones/guardar|"><i class="bi bi-plus-circle-fill"></i></a></h1>
 
-  <!-- <div th:if="${sinPersonas}">
-    <div class="alert alert-warning" role="alert">
-      No hay personas que puedan ser propietarias de un coche todavía. Crea alguna primero
-      <a th:href="|/personas/guardar|"><i class="bi bi-plus-circle-fill"></i></a>
-    </div>
-  </div>-->
+  <div th:if="${conducciones.isEmpty()}" class="alert alert-warning" role="alert">
+    No hay conducciones para mostrar. Crea alguna
+  </div>
 
-  <!--<form th:if="${!sinPersonas}" action="#" th:action="@{/coches/guardar}" th:object="${coche}" method="post">-->
-  <form action="#" th:action="@{/conductores/guardar}" th:object="${conductor}" method="post">
-    <div class="mb-3">
-      <label for="nombre" class="form-label">Nombre</label>
-      <input type="text" th:field="*{nombre}" class="form-control" id="nombre" aria-describedby="nombreHelp">
-      <div id="nombreHelp" class="form-text">Escribe el nombre del conductor, por ejemplo "Diego"</div>
-    </div>
-
-    <div class="mb-3">
-      <label for="carnet" class="form-label">Carnet</label>
-      <input type="text" th:field="*{carnet}" class="form-control" id="carnet" aria-describedby="carnetHelp">
-      <div id="carnetHelp" class="form-text">Introduce el carnet del conductor.</div>
-    </div>
-
-    <div class="mb-3">
-      <label for="experiencia" class="form-label">Experiencia</label>
-      <input type="number" th:field="*{experiencia}" class="form-control" id="experiencia" aria-describedby="experienciaHelp">
-      <div id="experienciaHelp" class="form-text">Escribe los años de experiencia del conductor.</div>
-    </div>
-
-    <input th:if="${editar}" type="hidden" th:field="*{cocheID}"/>
-
-    <button type="submit" class="btn btn-primary">Guardar</button>
-  </form>
+  <table th:if="${!conducciones.isEmpty()}" class="table table-primary">
+    <thead>
+    <tr>
+      <th scope="col">AutobusID</th>
+      <th scope="col">ConductorID</th>
+      <th scope="col">Matricula</th>
+      <th scope="col">Nombre</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="conduccion: ${conducciones}">
+      <th scope="row" th:text="${conduccion.conduceID.getAutobusID()}" />
+      <th scope="row" th:text="${conduccion.conduceID.getConductorID()}" />
+      <td th:text="${conduccion.autobus.getMatricula()}" />
+      <td th:text="${conduccion.conductor.getNombre()}" />
+      <td><a th:href="|/conducciones/guardar?autobusID=${conduccion.conduceID.autobusID}&conductorID=${conduccion.conduceID.conductorID}|"><i class="bi bi-pencil"></i></a></td>
+      <td><a th:href="|/conducciones/eliminar?autobusID=${conduccion.conduceID.autobusID}&conductorID=${conduccion.conduceID.conductorID}|"><i class="bi bi-x-circle"></i></a></td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

@@ -16,8 +16,9 @@ public class ConduceService {
     private IConduceDAO conduceDAO;
 
     public Integer save(Conduce conduce) {
-        if (conduce == null)
-            return PARAM_NULL;
+        if (conduce == null || conduce.getConduceID() == null) {
+            return PARAM_NULL; // Asegúrate de manejar este caso
+        }
         conduceDAO.save(conduce);
         return RESULT_OK;
     }
@@ -26,23 +27,22 @@ public class ConduceService {
         return conduceDAO.findAll();
     }
 
-    public Conduce findById(Integer id) {
-        if (id == null)
+    public Conduce findById(ConduceID conduceID) {
+        if (conduceID == null)
             return null;
-        return conduceDAO.getReferenceById(id);
+        return conduceDAO.getReferenceById(conduceID);
     }
 
-    public Integer deleteById(Integer id) {
+    public Integer delete(ConduceID conduceID) {
+        if (conduceID == null)
+            return PARAM_NULL;
+        conduceDAO.deleteById(conduceID);
+        return RESULT_OK;
+    }
+    /*public Integer deleteById(Integer id) {
         if (id == null)
             return PARAM_NULL;
         conduceDAO.deleteById(id);
         return RESULT_OK;
-    }
-
-    public Integer delete(Conduce conduce) {
-        if (conduce == null)
-            return PARAM_NULL;
-        conduceDAO.delete(conduce);
-        return RESULT_OK;
-    }
+    }*/
 }

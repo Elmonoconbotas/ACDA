@@ -34,7 +34,7 @@ public class AutobusController {
             model.addAttribute("editar", true);
         }
         model.addAttribute("autobus", autobus);
-        return "autobuses/guardar_autobus";
+        return "autobuses/guardar_autobuses";
     }
 
     @PostMapping("/guardar")
